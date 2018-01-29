@@ -140,12 +140,16 @@ class DQNAgent():
         # 다음 상태에 대한 최대 큐함수
         next_states = torch.Tensor(next_states)
         next_states = Variable(next_states).float()
-        next_pred = self.target_model(next_states).data.numpy()
+        next_pred = self.target_model(next_states).data
 
-        target = rewards + (1 - dones) * self.discount_factor * np.max(next_pred, axis=1)
-        target = Variable(torch.FloatTensor(target))
+        rewards = torch.FloatTensor(rewards)
+        dones = torch.FloatTensor(dones)
+
+        target = rewards + (1 - dones) * self.discount_factor * next_pred.max(1)[0]
+        target = Variable(target)
+
         errors = torch.abs(pred - target).data.numpy()
-        
+
         # priority 업데이트
         for i in range(self.batch_size):
             idx = mini_batch[i][0]
