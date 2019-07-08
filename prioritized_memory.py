@@ -13,7 +13,7 @@ class Memory:  # stored as ( s, a, r, s_ ) in SumTree
         self.capacity = capacity
 
     def _get_priority(self, error):
-        return (error + self.e) ** self.a
+        return (np.abs(error) + self.e) ** self.a
 
     def add(self, error, sample):
         p = self._get_priority(error)

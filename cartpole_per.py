@@ -158,7 +158,7 @@ class DQNAgent():
         self.optimizer.zero_grad()
 
         # MSE Loss function
-        loss = F.mse_loss(pred, target)
+        loss = (torch.FloatTensor(is_weights) * F.mse_loss(pred, target)).mean()
         loss.backward()
 
         # and train
